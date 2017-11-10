@@ -15,16 +15,18 @@ file_testshape = open("Testing_Data/testshape.csv","r")
 
 curr_data = []
 
+no_of_images = 10000
+
 print("Using KNN Classifier.....\n")
 clf = KNeighborsClassifier(n_neighbors = 1,n_jobs = -1)
 
 print("Evaluating raw pixel accuracy...")
 
-curr_data = [row for row in readfile(csv.reader(file_trainraw),10000)]
+curr_data = [row for row in readfile(csv.reader(file_trainraw),no_of_images)]
 clf.fit( [ [ float(x) for x in row[1:] ] for row in curr_data],
            [ int(row[0]) for row in curr_data ])
 
-curr_data = [row for row in readfile(csv.reader(file_testraw),10000)]
+curr_data = [row for row in readfile(csv.reader(file_testraw),no_of_images)]
 accuracy_raw = clf.score( [ [ float(x) for x in row[1:] ] for row in curr_data ],
                           [ int(row[0]) for row in curr_data ])
 
@@ -32,11 +34,11 @@ print("Raw pixel accuracy : {:.2f}%\n".format(accuracy_raw * 100))
 
 print("Evaluating histogram accuracy...")
 
-curr_data = [row for row in readfile(csv.reader(file_trainhist),10000)]
+curr_data = [row for row in readfile(csv.reader(file_trainhist),no_of_images)]
 clf.fit( [ [ float(x) for x in row[1:] ] for row in curr_data ],
            [ int(row[0]) for row in curr_data ])
 
-curr_data = [row for row in readfile(csv.reader(file_testhist),10000)]
+curr_data = [row for row in readfile(csv.reader(file_testhist),no_of_images)]
 accuracy_hist = clf.score( [ [ float(x) for x in row[1:] ] for row in curr_data ],
                            [ int(row[0]) for row in curr_data ])
 
@@ -44,11 +46,11 @@ print("Histogram accuracy : {:.2f}%\n".format(accuracy_hist * 100))
 
 print("Evaluating Modified histogram accuracy...")
 
-curr_data = [row for row in readfile(csv.reader(file_trainmodihist),10000)]
+curr_data = [row for row in readfile(csv.reader(file_trainmodihist),no_of_images)]
 clf.fit( [ [ float(x) for x in row[1:] ] for row in curr_data ],
            [ int(row[0]) for row in curr_data ])
 
-curr_data = [row for row in readfile(csv.reader(file_testmodihist),10000)]
+curr_data = [row for row in readfile(csv.reader(file_testmodihist),no_of_images)]
 accuracy_modihist = clf.score( [ [ float(x) for x in row[1:] ] for row in curr_data ],
            [ int(row[0]) for row in curr_data ])
 
@@ -56,11 +58,11 @@ print("Modified Histogram accuracy : {:.2f}%\n".format(accuracy_modihist * 100))
 
 print("Evaluating Modified histogram2 accuracy...")
 
-curr_data = [row for row in readfile(csv.reader(file_trainmodihist2),10000)]
+curr_data = [row for row in readfile(csv.reader(file_trainmodihist2),no_of_images)]
 clf.fit( [ [ float(x) for x in row[1:] ] for row in curr_data ],
            [ int(row[0]) for row in curr_data ])
 
-curr_data = [row for row in readfile(csv.reader(file_testmodihist2),10000)]
+curr_data = [row for row in readfile(csv.reader(file_testmodihist2),no_of_images)]
 accuracy_modihist2 = clf.score( [ [ float(x) for x in row[1:] ] for row in curr_data ],
            [ int(row[0]) for row in curr_data ])
 
@@ -68,11 +70,11 @@ print("Modified Histogram2 accuracy : {:.2f}%\n".format(accuracy_modihist2 * 100
 
 print("Evaluating shape accuracy...")
 
-curr_data = [row for row in readfile(csv.reader(file_trainshape),10000)]
+curr_data = [row for row in readfile(csv.reader(file_trainshape),no_of_images)]
 clf.fit( [ [ float(x) for x in row[1:] ] for row in curr_data ],
            [ int(row[0]) for row in curr_data ])
 
-curr_data = [row for row in readfile(csv.reader(file_testshape),10000)]
+curr_data = [row for row in readfile(csv.reader(file_testshape),no_of_images)]
 accuracy_shape = clf.score( [ [ float(x) for x in row[1:] ] for row in curr_data ],
            [ int(row[0]) for row in curr_data ])
 

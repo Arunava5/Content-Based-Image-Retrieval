@@ -68,7 +68,7 @@ high = 10001
 
 step = (high - low)//10
 
-for i in range(1,10001):
+for i in range(low,high):
     if i % step == 0:
         print("%d%% complete\n"%(i//step*10))
     filepath = "C:/Users/Arunava/MycvProjects/Corel10k/" + str(i) + ".jpg"
