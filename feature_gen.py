@@ -70,7 +70,7 @@ step = (high - low)//10
 
 for i in range(low,high):
     if i % step == 0:
-        print("%d%% complete\n"%(i//step*10))
+        print("%d%% complete\n"%((i-low+1)//step*10))
     filepath = "C:/Users/Arunava/MycvProjects/Corel10k/" + str(i) + ".jpg"
     label = ((i-1)//100) + 1
     image = cv2.imread(filepath)

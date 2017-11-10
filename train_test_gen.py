@@ -43,7 +43,7 @@ step = (high-low)//10
 
 for i in range(low,high):
     if i % step == 0:
-        print("%d%% complete\n"%(i//step*10))
+        print("%d%% complete\n"%((i-low+1)//step*10))
     raw_rows = readfile(reader_raw,100)
     hist_rows = readfile(reader_hist,100)
     modihist_rows = readfile(reader_modihist,100)
@@ -102,5 +102,11 @@ file_testhist.close()
 file_testmodihist.close()
 file_testmodihist2.close()
 file_testshape.close()
+
+file_raw.close()
+file_hist.close()
+file_modihist.close()
+file_modihist2.close()
+file_zernike.close()
 
 print("Training & Testing data created successfully!")
