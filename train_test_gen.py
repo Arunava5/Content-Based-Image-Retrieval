@@ -3,33 +3,25 @@ from sklearn.model_selection import train_test_split
 import csv
 from read_csv import readfile
 
-low = 1
-high = 10000
+os.mkdir("Training_Data")
+os.mkdir("Testing_Data")
 
-folder_name = "Feature_Vectors(" + str(low) + "-" + str(high) + ")"
-training_folder = "Training_Data(" + str(low) + "-" + str(high) + ")"
-testing_folder = "Testing_Data(" + str(low) + "-" + str(high) + ")"
+file_raw = open("Feature_Vectors/raw_features.csv","r")
+file_hist = open("Feature_Vectors/hist_features.csv","r")
+file_modihist = open("Feature_Vectors/modihist.csv","r")
+file_modihist2 = open("Feature_Vectors/modihist2.csv","r")
+file_zernike = open("Feature_Vectors/zernike.csv","r")
 
-os.mkdir(training_folder)
-os.mkdir(testing_folder)
-
-file_raw = open(folder_name+"/raw_features.csv","r")
-file_hist = open(folder_name+"/hist_features.csv","r")
-file_modihist = open(folder_name+"/modihist.csv","r")
-file_modihist2 = open(folder_name+"/modihist2.csv","r")
-file_zernike = open(folder_name+"/zernike.csv","r")
-
-file_trainraw = open(training_folder+"/trainraw.csv","w")
-file_trainhist = open(training_folder+"/trainhist.csv","w")
-file_trainmodihist = open(training_folder+"/trainmodihist.csv","w")
-file_trainmodihist2 = open(training_folder+"/trainmodihist2.csv","w")
-file_trainshape = open(training_folder+"/trainshape.csv","w")
-
-file_testraw = open(testing_folder+"/testraw.csv","w")
-file_testhist = open(testing_folder+"/testhist.csv","w")
-file_testmodihist = open(testing_folder+"/testmodihist.csv","w")
-file_testmodihist2 = open(testing_folder+"/testmodihist2.csv","w")
-file_testshape = open(testing_folder+"/testshape.csv","w")
+file_trainraw = open("Training_Data/trainraw.csv","w")
+file_trainhist = open("Training_Data/trainhist.csv","w")
+file_trainmodihist = open("Training_Data/trainmodihist.csv","w")
+file_trainmodihist2 = open("Training_Data/trainmodihist2.csv","w")
+file_trainshape = open("Training_Data/trainshape.csv","w")
+file_testraw = open("Testing_Data/testraw.csv","w")
+file_testhist = open("Testing_Data/testhist.csv","w")
+file_testmodihist = open("Testing_Data/testmodihist.csv","w")
+file_testmodihist2 = open("Testing_Data/testmodihist2.csv","w")
+file_testshape = open("Testing_Data/testshape.csv","w")
 
 reader_raw = csv.reader(file_raw)
 reader_hist = csv.reader(file_hist)
@@ -45,11 +37,12 @@ zernike_rows = []
 
 print("Creating Training & Testing data.....")
 
-high += 1
+low = 1
+high = 101
 step = (high-low)//10
 
 for i in range(low,high):
-    if (i-low+1) % step == 0:
+    if i % step == 0:
         print("%d%% complete\n"%((i-low+1)//step*10))
     raw_rows = readfile(reader_raw,100)
     hist_rows = readfile(reader_hist,100)

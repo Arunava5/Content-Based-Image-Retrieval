@@ -3,9 +3,6 @@ import cv2
 import numpy as np
 import mahotas
 
-low = 1
-high = 10000
-
 def img2feature(img,size = (32,32)):
     return cv2.resize(img,size).flatten().tolist()
 
@@ -58,20 +55,21 @@ def img2shape(img,radius):
 
 print("Creating Feature Vectors.....\n")
 
-folder_name = "Feature_Vectors(" + str(low) + "-" + str(high) + ")"
-os.mkdir(folder_name)
+os.mkdir("Feature_Vectors")
 
-file_raw = open(folder_name+"/raw_features.csv","w")
-file_hist = open(folder_name+"/hist_features.csv","w")
-file_modihist = open(folder_name+"/modihist.csv","w")
-file_modihist2 = open(folder_name+"/modihist2.csv","w")
-file_zernike = open(folder_name+"/zernike.csv","w")
+file_raw = open("Feature_Vectors/raw_features.csv","w+")
+file_hist = open("Feature_Vectors/hist_features.csv","w")
+file_modihist = open("Feature_Vectors/modihist.csv","w")
+file_modihist2 = open("Feature_Vectors/modihist2.csv","w")
+file_zernike = open("Feature_Vectors/zernike.csv","w")
 
-high += 1
+low = 1
+high = 10001
+
 step = (high - low)//10
 
 for i in range(low,high):
-    if (i-low+1) % step == 0:
+    if i % step == 0:
         print("%d%% complete\n"%((i-low+1)//step*10))
     filepath = "C:/Users/Arunava/MycvProjects/Corel10k/" + str(i) + ".jpg"
     label = ((i-1)//100) + 1
