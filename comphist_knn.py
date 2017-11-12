@@ -2,20 +2,29 @@ from sklearn.neighbors import KNeighborsClassifier
 import csv   
 from read_csv import readfile
 
-file_trainraw = open("Training_Data/trainraw.csv","r")
-file_trainhist = open("Training_Data/trainhist.csv","r")
-file_trainmodihist = open("Training_Data/trainmodihist.csv","r")
-file_trainmodihist2 = open("Training_Data/trainmodihist2.csv","r")
-file_trainshape = open("Training_Data/trainshape.csv","r")
-file_testraw = open("Testing_Data/testraw.csv","r")
-file_testhist = open("Testing_Data/testhist.csv","r")
-file_testmodihist = open("Testing_Data/testmodihist.csv","r")
-file_testmodihist2 = open("Testing_Data/testmodihist2.csv","r")
-file_testshape = open("Testing_Data/testshape.csv","r")
+
+low = 1
+high = 10000
+
+training_folder = "Training_Data(" + str(low) + "-" + str(high) + ")"
+testing_folder = "Testing_Data(" + str(low) + "-" + str(high) + ")"
+
+file_trainraw = open(training_folder+"/trainraw.csv","r")
+file_trainhist = open(training_folder+"/trainhist.csv","r")
+file_trainmodihist = open(training_folder+"/trainmodihist.csv","r")
+file_trainmodihist2 = open(training_folder+"/trainmodihist2.csv","r")
+file_trainshape = open(training_folder+"/trainshape.csv","r")
+
+file_testraw = open(testing_folder+"/testraw.csv","r")
+file_testhist = open(testing_folder+"/testhist.csv","r")
+file_testmodihist = open(testing_folder+"/testmodihist.csv","r")
+file_testmodihist2 = open(testing_folder+"/testmodihist2.csv","r")
+file_testshape = open(testing_folder+"/testshape.csv","r")
 
 curr_data = []
 
-no_of_images = 10000
+high += 1
+no_of_images = high - low
 
 print("Using KNN Classifier.....\n")
 clf = KNeighborsClassifier(n_neighbors = 1,n_jobs = -1)
