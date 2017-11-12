@@ -4,7 +4,7 @@ import csv
 from read_csv import readfile
 
 low = 1
-high = 10000
+high = 1000
 
 folder_name = "Feature_Vectors(" + str(low) + "-" + str(high) + ")"
 training_folder = "Training_Data(" + str(low) + "-" + str(high) + ")"

@@ -4,7 +4,7 @@ from read_csv import readfile
 
 
 low = 1
-high = 10000
+high = 1000
 
 training_folder = "Training_Data(" + str(low) + "-" + str(high) + ")"
 testing_folder = "Testing_Data(" + str(low) + "-" + str(high) + ")"

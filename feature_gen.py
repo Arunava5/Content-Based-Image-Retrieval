@@ -4,7 +4,7 @@ import numpy as np
 import mahotas
 
 low = 1
-high = 10000
+high = 1000
 
 def img2feature(img,size = (32,32)):
     return cv2.resize(img,size).flatten().tolist()
