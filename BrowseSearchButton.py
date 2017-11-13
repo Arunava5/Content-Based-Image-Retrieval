@@ -44,11 +44,12 @@ label.pack(ipadx = 10, ipady = 10, padx = 20, pady = 20)
 
 def search():
       for line in file:
-            filenum = file.read()
-            filepath = "Corel10k/" + str(filenum) + ".jpg"
-            #data = Image.open(filepath)
-            #img = ImageTk.PhotoImage(data)
-            img = cv2.imread(filepath)
+            filenum = file.readline()
+            print(filenum)
+            filename = 'Corel10k/' + str(filenum) + '.jpg'
+            data = Image.open(filename)
+            img = ImageTk.PhotoImage(data)
+            #img = cv2.imread(filepath)
             #print(img)
             #cv2.imshow('image', img)
             #cv2.waitKey(0)
