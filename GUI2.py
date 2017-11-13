@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Nov 13 10:29:50 2017
-
-@author: Santanu PC
-"""
-
 from tkinter import *
 import tkinter.filedialog as fd
 from PIL import Image, ImageTk
