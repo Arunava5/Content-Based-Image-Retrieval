@@ -9,19 +9,19 @@ high = 1000
 def img2feature(img,size = (32,32)):
     return cv2.resize(img,size).flatten().tolist()
 
-def img2hist(img,bins = (8,8,8)):
+def img2hist(img,bins = (16,7,7)):
     hsv = cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
     hist = cv2.calcHist([hsv],[0,1,2],None,bins,[0,180,0,256,0,256])
     cv2.normalize(hist,hist)
     return hist.flatten().tolist()
 
-def img2modihist(img,bins = (8,8,8)):
+def img2modihist(img,bins = (16,7,7)):
     hsv = cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
     features = []
     (h,w) = hsv.shape[:2]
     (cX,cY) = (int(w*0.5),int(h*0.5))
     segments = [(0, cX, 0, cY), (cX, w, 0, cY), (cX, w, cY, h),(0, cX, cY, h)]
-    (axesX, axesY) = (int(w * 7/32), int(h * 7/32) )
+    (axesX, axesY) = (int(w * 25/128), int(h * 25/128) )
     ellipMask = np.zeros(hsv.shape[:2], dtype = "uint8")
     cv2.ellipse(ellipMask, (cX, cY), (axesX, axesY), 0, 0, 360, 255, -1)
     for (startX, endX, startY, endY) in segments:
@@ -38,7 +38,7 @@ def img2modihist(img,bins = (8,8,8)):
     features += hist
     return features
 
-def img2modihist2(img,bins = (8,8,8)):
+def img2modihist2(img,bins = (16,7,7)):
     hsv = cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
     features = []
     (h,w) = hsv.shape[:2]
