@@ -15,4 +15,4 @@ def find_relevant(query_path,low,high):
     best_seghist = search(query_seghist_features,retrieve_count,low,high,1)
 
     print(best_seghist)
-
+    return best_seghist

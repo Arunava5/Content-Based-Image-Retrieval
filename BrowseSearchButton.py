@@ -55,7 +55,7 @@ def search():
       imgNum = find_relevant(Imagepath, int(e1.get()), int(e2.get()))
       for i in imgNum[:5]:
             #filenum = line
-            filename = "C:/MAD/CBIR/Corel10k/"+str(i)+".jpg"
+            filename = 'C:/Users/Arunava/MycvProjects/Corel10k/'+str(i)+'.jpg'
             data = Image.open(filename)
             img = ImageTk.PhotoImage(data)
             #img = cv2.imread(filepath)
@@ -68,7 +68,7 @@ def search():
             label2.pack(side = 'top')
       for i in imgNum[6:11]:
             #filenum = line
-            filename = "C:/MAD/CBIR/Corel10k/"+str(i)+".jpg"
+            filename = 'C:/Users/Arunava/MycvProjects/Corel10k/'+str(i)+'.jpg'
             data = Image.open(filename)
             img = ImageTk.PhotoImage(data)
             #img = cv2.imread(filepath)
