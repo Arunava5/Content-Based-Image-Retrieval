@@ -2,7 +2,13 @@ import tkinter as tk
 import tkinter.filedialog as fd
 from PIL import Image, ImageTk
 from query import find_relevant
-from minifeature_gen import gen_dataset
+#from minifeature_gen import gen_dataset
+from tkinter import ttk
+#for minifeature
+import os
+import cv2
+from img_descriptors import img2modihist
+
 
 main = tk.Tk()
 main.geometry("900x900")
@@ -16,6 +22,8 @@ frame3 = tk.Frame(main)
 frame3.pack()
 e1 = tk.Entry(frame1)
 e2 = tk.Entry(frame1)
+e1.insert(0,'1')
+e2.insert(0,'1000')
 e2.pack(side = 'bottom')
 e1.pack(side = 'bottom')
 
@@ -55,7 +63,7 @@ def search():
       imgNum = find_relevant(Imagepath, int(e1.get()), int(e2.get()))
       for i in imgNum[:5]:
             #filenum = line
-            filename = "C:/MAD/CBIR/Corel10k/"+str(i)+".jpg"
+            filename = "C:/Users/Santanu PC/Desktop/Corel10k/"+str(i)+".jpg"
             data = Image.open(filename)
             img = ImageTk.PhotoImage(data)
             #img = cv2.imread(filepath)
@@ -65,10 +73,10 @@ def search():
             label2 = tk.Label(frame2, image = None)
             label2.config(image = img, bg = 'red')
             label2.image = img
-            label2.pack(side = 'top')
-      for i in imgNum[6:11]:
+            label2.pack(side = 'left')
+      for i in imgNum[5:10]:
             #filenum = line
-            filename = "C:/MAD/CBIR/Corel10k/"+str(i)+".jpg"
+            filename = "C:/Users/Santanu PC/Desktop/Corel10k/"+str(i)+".jpg"
             data = Image.open(filename)
             img = ImageTk.PhotoImage(data)
             #img = cv2.imread(filepath)
@@ -78,7 +86,7 @@ def search():
             label2 = tk.Label(frame3, image = None)
             label2.config(image = img, bg = 'red')
             label2.image = img
-            label2.pack(side = 'top')
+            label2.pack(side = 'left')
 
 def dataset():
       gen_dataset(int(e1.get()), int(e2.get()))
@@ -96,4 +104,75 @@ button2.pack(side = 'left', padx = 20, pady = 20)
 
 button3 = tk.Button(frame1, text = 'Clear images', command = clear_label)
 button3.pack(side = 'left', padx = 20, pady = 20)
+
+
+progress=ttk.Progressbar(main,orient="horizontal",length=200, mode="determinate")
+
+def prog(i,low,high):
+	progress.pack()
+	progress["maximum"]=high-low
+	progress["value"]=i-low+1
+	main.update()
+
+
+
+
+
+
+
+#MINIFEATURE.PY
+
+
+def gen_dataset(low,high):
+	
+
+    print("Creating Feature Vectors.....\n")
+
+    folder_name = "Feature_Vectors(" + str(low) + "-" + str(high) + ")"
+    os.mkdir(folder_name)
+
+    file_seghist = open(folder_name+"/seghist.csv","w")
+
+    high += 1
+    step = (high - low)//10
+	
+	
+    for i in range(low,high):
+        if (i-low+1) % step == 0:
+            print("%d%% complete\n"%((i-low+1)//step*10))
+        filepath = "C:/Users/Santanu PC/Desktop/Corel10k/" + str(i) + ".jpg"
+        image = cv2.imread(filepath)    
+        modihist = img2modihist(image)
+        modihist = [str(i) for i in modihist]    
+        file_seghist.write("%s,%s\n"%(str(i),",".join(modihist)))
+        prog(i,low,high)		   
+    file_seghist.close()
+	
+
+
+	
+	
+
+    print("Feature Vectors created successfully!")
+
+
+
+
+
+
+
+
+#STATUS BAR
+
+
+
+
+
+
+
+
+
+
+
+
 main.mainloop()   
