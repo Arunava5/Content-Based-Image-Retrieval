@@ -7,21 +7,24 @@ from tkinter import ttk
 import os
 import cv2
 from img_descriptors import img2modihist
+from tkinter import messagebox
+
+
 
 labels = []
 main = tk.Tk()
 main.geometry("1200x900")
 main.resizable()
-main.title("Final Year Project")
-main.config(bg = 'black')
+main.title("CONTENT BASED IMAGE RETRIEVAL-Final Year Project")
+main.config(bg = '#292A33')
 frame1 = tk.Frame(main)
 frame1.pack()
-frame1.config(bg = 'black')
+frame1.config(bg = '#292A33')
 frame2 = tk.Frame(main)
 frame2.pack(padx = 5, pady = 5)
-frame2.config(bg = 'black')
+frame2.config(bg = '#292A33')
 frame3 = tk.Frame(main)
-frame3.config(bg = 'black')
+frame3.config(bg = '#292A33')
 frame3.pack(padx = 5, pady = 5)
 e1 = tk.Entry(frame1)
 e2 = tk.Entry(frame1)
@@ -31,9 +34,9 @@ e2.pack(side = 'bottom')
 e1.pack(side = 'bottom')
 
 label = tk.Label(frame1, image = None)
-label1 = tk.Label(frame1, text = 'Content Based Image Retrieval')
-label1.pack(ipadx = 20, ipady = 10, padx = 10, pady = 10)
-label1.config(font = ('Algerian', 20), fg = 'white', bg = 'black')
+label1 = tk.Label(frame1, text = 'Content Based Image Retrieval System')
+label1.pack(ipadx = 20, ipady = 10, padx = 10, pady = 40)
+label1.config(font = ('algerian', 30), fg = '#18E5EA', bg = '#292A33')
 
 
 
@@ -46,11 +49,11 @@ def chooseFile(type = 'public'):
       if ImageFile != None:
             data = Image.open(ImageFile)
             img = ImageTk.PhotoImage(data)
-            label.config(image = img, bg = 'red')
+            label.config(image = img, bg = '#18E5EA')
             label.image = img
                 
 
-button = tk.Button(frame1, text = 'Upload image', command = chooseFile)
+button = tk.Button(frame1, text = 'UPLOAD IMAGE', command = chooseFile, padx=15,pady=8,bg ='#18E5EA',activebackground='#FC9F31', bd='5', relief='raised')
 button.pack()
 
 label.pack(ipadx = 3, ipady = 3, padx = 5, pady = 5)
@@ -60,23 +63,23 @@ def search():
       imgNum = find_relevant(Imagepath, int(e1.get()), int(e2.get()))
       
       for i in imgNum[:5]:
-            filename = "C:/Users/Arunava/MycvProjects/Corel10k/"+str(i)+".jpg"
+            filename = "C:/Users/Santanu PC/Desktop/Corel10k/"+str(i)+".jpg"
             data = Image.open(filename)
             img = ImageTk.PhotoImage(data)
             label2 = tk.Label(frame2, image = None)
             labels.append(label2)
-            label2.config(image = img, bg = 'blue')
+            label2.config(image = img, bg = '#FC9F31')
             label2.image = img
-            label2.pack(side = 'left', ipadx = 3, ipady = 3, padx = 10, pady = 5)
+            label2.pack(side = 'left', ipadx = 3, ipady = 1, padx = 10, pady = 1)
       for i in imgNum[5:10]:
-            filename = "C:/Users/Arunava/MycvProjects/Corel10k/"+str(i)+".jpg"
+            filename = "C:/Users/Santanu PC/Desktop/Corel10k/"+str(i)+".jpg"
             data = Image.open(filename)
             img = ImageTk.PhotoImage(data)
             label3 = tk.Label(frame3, image = None)
             labels.append(label3)
-            label3.config(image = img, bg = 'blue')
+            label3.config(image = img, bg = '#FC9F31')
             label3.image = img
-            label3.pack(side = 'left',  ipadx = 3, ipady = 3, padx = 10, pady = 5)
+            label3.pack(side = 'left',  ipadx = 3, ipady = 1, padx = 10, pady = 1)
       
       
 def gen_dataset(low, high):
@@ -110,7 +113,7 @@ def gen_dataset(low, high):
     for i in range(low,high):
         if (i-low+1) % step == 0:
             print("%d%% complete\n"%((i-low+1)//step*10))
-        filepath = "C:/Users/Arunava/MycvProjects/Corel10k/" + str(i) + ".jpg"
+        filepath = "C:/Users/Santanu PC/Desktop/Corel10k/" + str(i) + ".jpg"
         image = cv2.imread(filepath)    
         modihist = img2modihist(image)
         modihist = [str(i) for i in modihist]    
@@ -121,9 +124,10 @@ def gen_dataset(low, high):
 #        prog(i,low,high)		   
     file_seghist.close()
     popup.destroy()
-    label4 = tk.Label(frame2,text = "Dataset has been generated",padx = 5,pady = 5)
-    label4.config(font = ('Impact',10),fg = 'Yellow',bg = 'black')
-    label4.pack(side = 'top')
+#    label4 = tk.Label(frame2,text = "Dataset has been generated",padx = 5,pady = 5)
+#    label4.config(font = ('Impact',14),fg = '#18E5EA',bg = '#292A33')
+#    label4.pack(side = 'top')
+    messagebox.showinfo( "Dataset Generation", "Dataset Generated")
     print("Feature Vectors created successfully!")
 
 
@@ -134,14 +138,14 @@ def clear_label():
       for label in labels:
             label.destroy()
             
-button1 = tk.Button(frame1, text = 'Search image', command = search)
-button1.pack(side = 'left', padx = 40, pady = 10)
+button1 = tk.Button(frame1, text = 'Search image', command = search,padx=20,pady=5,bg ='#18E5EA',activebackground='#18E5EA', bd='5', relief='raised')
+button1.pack(side = 'left', padx = 102)
 
-button2 = tk.Button(frame1, text = 'Generate dataset', command = dataset)
-button2.pack(side = 'left', padx = 40, pady = 10)
+button2 = tk.Button(frame1, text = 'Generate dataset', command = dataset,padx=20,pady=5,bg ='#18E5EA',activebackground='#18E5EA', bd='5', relief='raised')
+button2.pack(side = 'left', padx = 40)
 
-button3 = tk.Button(frame1, text = 'Clear images', command = clear_label)
-button3.pack(side = 'left', padx = 10, pady = 10)
+button3 = tk.Button(frame1, text = 'Clear images', command = clear_label,padx=20,pady=5,bg ='#18E5EA',activebackground='#18E5EA', bd='5', relief='raised')
+button3.pack(side = 'left', padx = 60)
 
 
 
