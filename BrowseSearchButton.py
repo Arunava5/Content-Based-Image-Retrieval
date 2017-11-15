@@ -92,7 +92,21 @@ def gen_dataset(low, high):
     high += 1
     step = (high - low)//10
 	
-	
+    popup = tk.Toplevel()
+    screen_width = main.winfo_screenwidth()
+    screen_height = main.winfo_screenheight()
+
+    # calculate position x and y coordinates
+    x = (screen_width/2) - 150
+    y = (screen_height/2) - 50
+    popup.geometry("300x100+%d+%d"%(x,y))
+    popup.title("Generating Dataset")	
+    tk.Label(popup).grid(row=0,column=0)
+    progress = 0
+    progress_var = tk.DoubleVar()
+    progress_bar = ttk.Progressbar(popup, variable=progress_var, length = 300,maximum=high-low)
+    progress_bar.grid(row=1, column=0)
+    popup.pack_slaves()
     for i in range(low,high):
         if (i-low+1) % step == 0:
             print("%d%% complete\n"%((i-low+1)//step*10))
@@ -101,8 +115,15 @@ def gen_dataset(low, high):
         modihist = img2modihist(image)
         modihist = [str(i) for i in modihist]    
         file_seghist.write("%s,%s\n"%(str(i),",".join(modihist)))
-        prog(i,low,high)		   
+        popup.update()
+        progress += 1
+        progress_var.set(progress)
+#        prog(i,low,high)		   
     file_seghist.close()
+    popup.destroy()
+    label4 = tk.Label(frame2,text = "Dataset has been generated",padx = 5,pady = 5)
+    label4.config(font = ('Impact',10),fg = 'Yellow',bg = 'black')
+    label4.pack(side = 'top')
     print("Feature Vectors created successfully!")
 
 
@@ -125,6 +146,7 @@ button3.pack(side = 'left', padx = 10, pady = 10)
 
 
 
+'''
 progress=ttk.Progressbar(main,orient="horizontal",length=200, mode="determinate")
 
 def prog(i,low,high):
@@ -132,5 +154,5 @@ def prog(i,low,high):
 	progress["maximum"]=high-low
 	progress["value"]=i-low+1
 	main.update()
-
+'''
 main.mainloop()   
