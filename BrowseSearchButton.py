@@ -33,7 +33,7 @@ e1.pack(side = 'bottom')
 label = tk.Label(frame1, image = None)
 label1 = tk.Label(frame1, text = 'Content Based Image Retrieval')
 label1.pack(ipadx = 20, ipady = 10, padx = 10, pady = 10)
-label1.config(font = ('Algerian', 10), fg = 'white', bg = 'black')
+label1.config(font = ('Algerian', 20), fg = 'white', bg = 'black')
 
 
 
@@ -60,28 +60,16 @@ def search():
       imgNum = find_relevant(Imagepath, int(e1.get()), int(e2.get()))
       
       for i in imgNum[:5]:
-<<<<<<< HEAD
-            #filenum = line
-            filename = 'C:/Users/Arunava/MycvProjects/Corel10k/'+str(i)+'.jpg'
-=======
-            filename = "C:/MAD/CBIR/Corel10k/"+str(i)+".jpg"
->>>>>>> origin/master
+            filename = "C:/Users/Arunava/MycvProjects/Corel10k/"+str(i)+".jpg"
             data = Image.open(filename)
             img = ImageTk.PhotoImage(data)
             label2 = tk.Label(frame2, image = None)
             labels.append(label2)
             label2.config(image = img, bg = 'blue')
             label2.image = img
-<<<<<<< HEAD
-            label2.pack(side = 'top')
-      for i in imgNum[6:11]:
-            #filenum = line
-            filename = 'C:/Users/Arunava/MycvProjects/Corel10k/'+str(i)+'.jpg'
-=======
             label2.pack(side = 'left', ipadx = 3, ipady = 3, padx = 10, pady = 5)
       for i in imgNum[5:10]:
-            filename = "C:/MAD/CBIR/Corel10k/"+str(i)+".jpg"
->>>>>>> origin/master
+            filename = "C:/Users/Arunava/MycvProjects/Corel10k/"+str(i)+".jpg"
             data = Image.open(filename)
             img = ImageTk.PhotoImage(data)
             label3 = tk.Label(frame3, image = None)
@@ -108,7 +96,7 @@ def gen_dataset(low, high):
     for i in range(low,high):
         if (i-low+1) % step == 0:
             print("%d%% complete\n"%((i-low+1)//step*10))
-        filepath = "C:/MAD/CBIR/Corel10k/" + str(i) + ".jpg"
+        filepath = "C:/Users/Arunava/MycvProjects/Corel10k/" + str(i) + ".jpg"
         image = cv2.imread(filepath)    
         modihist = img2modihist(image)
         modihist = [str(i) for i in modihist]    
@@ -126,10 +114,10 @@ def clear_label():
             label.destroy()
             
 button1 = tk.Button(frame1, text = 'Search image', command = search)
-button1.pack(side = 'left', padx = 10, pady = 10)
+button1.pack(side = 'left', padx = 40, pady = 10)
 
 button2 = tk.Button(frame1, text = 'Generate dataset', command = dataset)
-button2.pack(side = 'left', padx = 10, pady = 10)
+button2.pack(side = 'left', padx = 40, pady = 10)
 
 button3 = tk.Button(frame1, text = 'Clear images', command = clear_label)
 button3.pack(side = 'left', padx = 10, pady = 10)
