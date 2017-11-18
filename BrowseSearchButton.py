@@ -15,6 +15,7 @@ labels = []
 main = tk.Tk()
 main.geometry("1200x900")
 main.resizable()
+
 main.title("CONTENT BASED IMAGE RETRIEVAL-Final Year Project")
 main.config(bg = '#292A33')
 frame1 = tk.Frame(main)
@@ -26,12 +27,16 @@ frame2.config(bg = '#292A33')
 frame3 = tk.Frame(main)
 frame3.config(bg = '#292A33')
 frame3.pack(padx = 5, pady = 5)
-e1 = tk.Entry(frame1)
-e2 = tk.Entry(frame1)
+
+
+
+
+e1 = tk.Entry(frame1,bg='#292A33',fg='white')
+e2 = tk.Entry(frame1,bg='#292A33',fg='white')
 e1.insert(0,'1')
 e2.insert(0,'1000')
 e2.pack(side = 'bottom')
-e1.pack(side = 'bottom')
+e1.pack(side = 'bottom',pady=5)
 
 label = tk.Label(frame1, image = None)
 label1 = tk.Label(frame1, text = 'Content Based Image Retrieval System')
@@ -53,7 +58,7 @@ def chooseFile(type = 'public'):
             label.image = img
                 
 
-button = tk.Button(frame1, text = 'UPLOAD IMAGE', command = chooseFile, padx=15,pady=8,bg ='#18E5EA',activebackground='#FC9F31', bd='5', relief='raised')
+button = tk.Button(frame1, text = 'UPLOAD IMAGE', command = chooseFile, padx=15,pady=5,bg ='#18E5EA',activebackground='#FC9F31', bd='5', relief='raised')
 button.pack()
 
 label.pack(ipadx = 3, ipady = 3, padx = 5, pady = 5)
@@ -80,8 +85,11 @@ def search():
             label3.config(image = img, bg = '#FC9F31')
             label3.image = img
             label3.pack(side = 'left',  ipadx = 3, ipady = 1, padx = 10, pady = 1)
-      
-      
+
+
+
+
+     
 def gen_dataset(low, high):
 	
 
@@ -127,7 +135,7 @@ def gen_dataset(low, high):
 #    label4 = tk.Label(frame2,text = "Dataset has been generated",padx = 5,pady = 5)
 #    label4.config(font = ('Impact',14),fg = '#18E5EA',bg = '#292A33')
 #    label4.pack(side = 'top')
-    messagebox.showinfo( "Dataset Generation", "Dataset Generated")
+    messagebox.showinfo( "Feature vector Generation", "Feature vectors Generated")
     print("Feature Vectors created successfully!")
 
 
@@ -138,13 +146,13 @@ def clear_label():
       for label in labels:
             label.destroy()
             
-button1 = tk.Button(frame1, text = 'Search image', command = search,padx=20,pady=5,bg ='#18E5EA',activebackground='#18E5EA', bd='5', relief='raised')
-button1.pack(side = 'left', padx = 102)
+button1 = tk.Button(frame1, text = 'SEARCH  IMAGE', command = search,padx=20,pady=4,bg ='#18E5EA',activebackground='#18E5EA', bd='5', relief='raised')
+button1.pack(side = 'left', padx = 75)
 
-button2 = tk.Button(frame1, text = 'Generate dataset', command = dataset,padx=20,pady=5,bg ='#18E5EA',activebackground='#18E5EA', bd='5', relief='raised')
+button2 = tk.Button(frame1, text = 'GENERATE  FEATURE  VECTORS', command = dataset,padx=20,pady=4,bg ='#18E5EA',activebackground='#18E5EA', bd='5', relief='raised')
 button2.pack(side = 'left', padx = 40)
 
-button3 = tk.Button(frame1, text = 'Clear images', command = clear_label,padx=20,pady=5,bg ='#18E5EA',activebackground='#18E5EA', bd='5', relief='raised')
+button3 = tk.Button(frame1, text = 'CLEAR  IMAGES', command = clear_label,padx=20,pady=4,bg ='#18E5EA',activebackground='#18E5EA', bd='5', relief='raised')
 button3.pack(side = 'left', padx = 60)
 
 
