@@ -1,9 +1,12 @@
 import os
 import cv2
-from img_descriptors import img2modihist
+from img_descriptors import img2modihist,w2d
+from skimage.feature import greycomatrix as gc
+from skimage.feature import greycoprops as gp
 from tkinter import messagebox
 import tkinter as tk
 from tkinter import ttk
+import numpy as np
 
 def gen_dataset(low,high,main):
 
@@ -38,6 +41,19 @@ def gen_dataset(low,high,main):
         image = cv2.imread(filepath)
     
         modihist = img2modihist(image)
+        
+        img = w2d(filepath,'db1',5)
+        grey = gc(img,[1],[0, np.pi/4, np.pi/2, 3*np.pi/4],levels = 256)
+        contrast = gp(grey,'contrast')
+        energy = gp(grey,'energy')
+        (h,w) = img.shape[:2]
+        tot = h*w
+        for x in range(4):
+            modihist.append(contrast[0][x]/(tot*10000))
+        for x in range(4):
+            modihist.append(energy[0][x]/tot)
+     
+        
         modihist = [str(i) for i in modihist]
     
         file_seghist.write("%s,%s\n"%(str(i),",".join(modihist)))     
