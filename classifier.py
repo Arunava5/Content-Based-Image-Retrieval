@@ -19,19 +19,13 @@ def classifyImage(queryPath,low,high):
     fvector_size = 11 * 8 * 9 * 5 + 24
 
     train_size = dataset[4]
-    test_size = dataset[5]
     
     train_dataset = np.ndarray(shape=(train_size,fvector_size),dtype=np.float32)  
-    test_dataset  = np.ndarray(shape=(test_size,fvector_size),dtype=np.float32)
     train_labels = np.ndarray(train_size,dtype=np.int32)
-    test_labels = np.ndarray(test_size,dtype=np.int32)    
       
     train_dataset = dataset[0]
     train_labels = dataset[1]
-    test_dataset = dataset[2]
-    test_labels = dataset[3]
 
-    
     image = cv2.imread(queryPath)
     
     modihist = img2modihist(image)

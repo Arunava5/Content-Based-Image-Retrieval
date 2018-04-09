@@ -7,7 +7,9 @@ from tkinter import messagebox
 import tkinter as tk
 from tkinter import ttk
 import numpy as np
+from loc_dataset import location
 
+   
 def gen_dataset_retrieve(low,high,main):
 
     folder_name = "Feature_Vectors(" + str(low) + "-" + str(high) + ")"
@@ -36,7 +38,7 @@ def gen_dataset_retrieve(low,high,main):
     popup.pack_slaves()
 
     for i in range(low,high):
-        filepath = "C:/Users/Arunava/MycvProjects/Corel10k/" + str(i) + ".jpg"
+        filepath = location + str(i) + ".jpg"
 
         image = cv2.imread(filepath)
     

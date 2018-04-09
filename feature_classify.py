@@ -9,6 +9,10 @@ import tkinter as tk
 from tkinter import ttk
 from six.moves import cPickle as pickle
 import os
+from shutil import copy
+from shutil import rmtree
+from loc_dataset import location
+
 
 def gen_dataset_classify(low,high,main):
     
@@ -68,7 +72,18 @@ def gen_dataset_classify(low,high,main):
     
     traindex = 0
     testdex = 0 
-   
+    
+    train_folder = 'Training Images(' + str(templow) + '-' + str(temphigh) + ')'
+    test_folder = 'Testing Images(' + str(templow) + '-' + str(temphigh) + ')'
+    
+    if os.path.exists(train_folder):
+        rmtree(train_folder)
+    if os.path.exists(test_folder):
+        rmtree(test_folder)
+        
+    os.mkdir(train_folder)
+    os.mkdir(test_folder)
+    
     train_size = len(train_images)
     test_size = len(test_images)   
     train_dataset = np.ndarray(shape=(train_size,fvector_size),dtype=np.float32)  
@@ -93,7 +108,7 @@ def gen_dataset_classify(low,high,main):
     
     for m in train_images:
       
-        filepath = "C:/Users/Arunava/MycvProjects/Corel10k/" + str(m) + ".jpg"
+        filepath = location + str(m) + ".jpg"
         image = cv2.imread(filepath)
  
         modihist = img2modihist(image)
@@ -109,10 +124,12 @@ def gen_dataset_classify(low,high,main):
         popup.update()
         progress += 1
         progress_var.set(progress)
+        
+        copy(filepath,train_folder)
     
     for m in test_images:
          
-        filepath = "C:/Users/Arunava/MycvProjects/Corel10k/" + str(m) + ".jpg"
+        filepath = location + str(m) + ".jpg"
         image = cv2.imread(filepath)
     
         modihist = img2modihist(image)
@@ -128,6 +145,9 @@ def gen_dataset_classify(low,high,main):
         popup.update()
         progress += 1
         progress_var.set(progress)
+        
+        copy(filepath,test_folder)
+
         
     popup.destroy()
     

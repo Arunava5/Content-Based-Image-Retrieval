@@ -7,15 +7,24 @@ from feature_classify import gen_dataset_classify
 from tkinter import messagebox
 from classifier import classifyImage
 from tkinter import font
+from loc_dataset import location
 
 categories = ['null','Painting','Bear','Wolf','Lion','Elephant','Tiger','Mountains','Swimming',
-              'Historic Monuments','Vegetables','Woman','Dog','Clouds','Mushrooms','RandomPatterns(1)','Dinosaur',
+              'Historic Monuments','Vegetables','Woman','Dog','Clouds','Mushrooms','Fort','Kid\'s Poster',
+              'Tribal People','Juice','Martial Arts','Universe','Books','Fruits','Tree Sampling',
+              'Sign Boards','Crackers','House Door','Deer','Racing Cars','Bridges','Water Body',
+              'Land Patches','House Interior','Sea-shells','Road Signs','Beaches','Stone Pellets',
+              'Sunset','Car','Graphic Art','Playing Cards','Rhinoceros','Butterfly','Ceramics',
+              'Dolls','Tools','Houses','Guns','National Flags','Coal Train','Kaleidoscope Visualisations',
+              'Tennis','Stamps','Air Baloons','Medicine Pellets','Ships','Pastries','Buses','Oil Paintings',
+              'Coloured Eggs','Bikes','Beads','Dinosaur',
               'Microbe','CycleAd','Sailboat','Barren Land','Atom','Oil Painting','Airfighter','Furniture',
               'Chimpanzee','WildSheeps and Antelopes','Millitary/Army','Waves','Cats','WaterAthletes',
-              'RandomPatterns(2)','Microscopic World','Tree','Fish','RandomPatterns(3)','Floral Design','Lighthouse',
-              'Bird','Stones n Crystals','RandomPatterns(4)','Polo','Spices','Candies','Flower Garden',
+              'Underwater Designs','Microscopic World','Tree','Fish','Wooden Designs','Floral Design','Lighthouse',
+              'Bird','Stones n Crystals','Crystal Art','Polo','Spices','Candies','Flower Garden',
               'Horse','Musical Instrument','Flower','Leaf','Duck','Bird(2)','Sheet Designs','Beach Fashion',
-              'Railway','RandomPatterns(5)']
+              'Railway','Ferns']
+
 
 labels = []
 main = tk.Tk()
@@ -24,7 +33,7 @@ main.resizable()
 
 helv36 = font.Font(family='Helvetica', size=12, weight='bold')
 
-main.title("CONTENT BASED IMAGE RETRIEVAL-Final Year Project")
+main.title("CONTENT BASED IMAGE RETRIEVAL - Final Year Project(14UP04)")
 main.config(bg = '#292A33')
 frame1 = tk.Frame(main)
 frame1.pack(pady=10)
@@ -48,12 +57,15 @@ e1.pack(side = 'bottom',pady=5)
 
 label1 = tk.Label(frame1, text = 'Content Based Image Retrieval System')
 label1.pack(ipadx = 0, ipady = 20, padx = 0, pady = 0)
-label1.config(font = ('algerian', 30), fg = '#18E5EA', bg = '#292A33')
+label1.config(font = ('algerian', 30), fg = '#f2c38a', bg = '#292A33')
 
 Imagepath = ''
 
 def chooseFile(type = 'public'):
       global Imagepath
+      if Imagepath != '':
+          clear_label()
+          Imagepath = ''
       ImageFile = fd.askopenfile(parent=main,mode='rb',title='Choose a file', filetypes=[("jpeg files","*.jpg")])
       if ImageFile != None:
             Imagepath = ImageFile.name
@@ -69,7 +81,7 @@ def chooseFile(type = 'public'):
             label.config(image = img, bg = '#18E5EA')
             label.image = img
             labels.append(label)                
-button = tk.Button(frame1, text = 'UPLOAD IMAGE', command = chooseFile, font = helv36, padx=15,pady=4,bg ='#18E5EA',activebackground='#FC9F31', bd='5', relief='raised')
+button = tk.Button(frame1, text = 'UPLOAD  IMAGE', command = chooseFile, font = helv36, padx=15,pady=4,foreground = '#FFFFFF',bg ='#821a16',activebackground='#821a16', bd='5', relief='raised')
 button.pack(pady = 10)
 
 
@@ -79,7 +91,7 @@ def search():
       if not imgNum:
           return
       for i in imgNum[:5]:
-            filename = "C:/Mad/CBIR/Corel10k/"+str(i)+".jpg"
+            filename = location + str(i) + ".jpg"
             data = Image.open(filename)
             (w,h) = data.size
             if h > 130:
@@ -94,7 +106,7 @@ def search():
             label2.pack(side = 'left', ipadx = 3, ipady = 1, padx = 10, pady = 1)
 
       for i in imgNum[5:10]:
-            filename = "C:/Mad/CBIR/Corel10k/"+str(i)+".jpg"
+            filename = location + str(i) + ".jpg"
             data = Image.open(filename)
             (w,h) = data.size
             if h > 130:
@@ -131,19 +143,19 @@ def classify():
         messagebox.showinfo('Category','This image belongs to category: ' + categories[cnt])
 
 
-button1 = tk.Button(frame2, text = 'GENERATE FEATURE VECTORS(RETRIEVAL)', font = helv36,command = dataset,padx=10,pady=4,bg ='#18E5EA',activebackground='#18E5EA', bd='5', relief='raised')
+button1 = tk.Button(frame2, text = 'GENERATE  FEATURE  VECTORS  (RETRIEVAL)', foreground = '#FFFFFF',font = helv36,command = dataset,padx=10,pady=4,bg ='#7c127b',activebackground='#7c127b', bd='5', relief='raised')
 button1.pack(side = 'left', padx = 10)
            
 button2 = tk.Button(frame2, text = 'SEARCH  IMAGE', command = search,font = helv36,padx=10,pady=4,bg ='#18E5EA',activebackground='#18E5EA', bd='5', relief='raised')
 button2.pack(side = 'left', padx = 10)
 
-button3 = tk.Button(frame2, text = 'GENERATE DATASET(CLASSIFICATION) ',font = helv36, command = gen_classify ,padx=10,pady=4,bg ='#18E5EA',activebackground='#18E5EA', bd='5', relief='raised')
+button3 = tk.Button(frame2, text = 'GENERATE  DATASET  (CLASSIFICATION) ',font = helv36, foreground = '#FFFFFF', command = gen_classify ,padx=10,pady=4,bg ='#18660e',activebackground='#18660e', bd='5', relief='raised')
 button3.pack(side = 'left', padx = 10)
 
 button4 = tk.Button(frame2, text = 'CLASSIFY', font = helv36,command = classify,padx=10,pady=4,bg ='#18E5EA',activebackground='#18E5EA', bd='5', relief='raised')
 button4.pack(side = 'left', padx = 10)
 
-button4 = tk.Button(frame2, text = 'CLEAR  IMAGES',font = helv36, command = clear_label,padx=10,pady=4,bg ='#18E5EA',activebackground='#18E5EA', bd='5', relief='raised')
+button4 = tk.Button(frame2, text = 'CLEAR  IMAGES',font = helv36, command = clear_label,padx=10,pady=4,bg ='#ad131a',foreground = '#FFFFFF',activebackground='#ad131a', bd='5', relief='raised')
 button4.pack(side = 'left', padx = 10)
 
 main.mainloop()   

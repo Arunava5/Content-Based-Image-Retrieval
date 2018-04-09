@@ -6,6 +6,7 @@ from skimage.feature import greycoprops as gp
 from searcher import search
 from tkinter import messagebox
 
+
 def find_relevant(query_path,low,high,main):
     if query_path == '':
         messagebox.showinfo( "Error", "Please upload the query image before searching!")
