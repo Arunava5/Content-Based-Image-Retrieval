@@ -9,7 +9,14 @@ from classifier import classifyImage
 from tkinter import font
 
 categories = ['null','Painting','Bear','Wolf','Lion','Elephant','Tiger','Mountains','Swimming',
-              'Historic Monuments','Vegetables','Woman','Dog','Clouds','Mushrooms']
+              'Historic Monuments','Vegetables','Woman','Dog','Clouds','Mushrooms','RandomPatterns(1)','Dinosaur',
+              'Microbe','CycleAd','Sailboat','Barren Land','Atom','Oil Painting','Airfighter','Furniture',
+              'Chimpanzee','WildSheeps and Antelopes','Millitary/Army','Waves','Cats','WaterAthletes',
+              'RandomPatterns(2)','Microscopic World','Tree','Fish','RandomPatterns(3)','Floral Design','Lighthouse',
+              'Bird','Stones n Crystals','RandomPatterns(4)','Polo','Spices','Candies','Flower Garden',
+              'Horse','Musical Instrument','Flower','Leaf','Duck','Bird(2)','Sheet Designs','Beach Fashion',
+              'Railway','RandomPatterns(5)']
+
 labels = []
 main = tk.Tk()
 main.geometry("1400x900")
@@ -72,7 +79,7 @@ def search():
       if not imgNum:
           return
       for i in imgNum[:5]:
-            filename = "C:/Users/Arunava/MycvProjects/Corel10k/"+str(i)+".jpg"
+            filename = "C:/Mad/CBIR/Corel10k/"+str(i)+".jpg"
             data = Image.open(filename)
             (w,h) = data.size
             if h > 130:
@@ -87,7 +94,7 @@ def search():
             label2.pack(side = 'left', ipadx = 3, ipady = 1, padx = 10, pady = 1)
 
       for i in imgNum[5:10]:
-            filename = "C:/Users/Arunava/MycvProjects/Corel10k/"+str(i)+".jpg"
+            filename = "C:/Mad/CBIR/Corel10k/"+str(i)+".jpg"
             data = Image.open(filename)
             (w,h) = data.size
             if h > 130:
