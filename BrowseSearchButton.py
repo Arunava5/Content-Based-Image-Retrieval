@@ -24,7 +24,7 @@ main.resizable()
 
 helv36 = font.Font(family='Helvetica', size=12, weight='bold')
 
-main.title("CONTENT BASED IMAGE RETRIEVAL-Final Year Project")
+main.title("CONTENT BASED IMAGE RETRIEVAL - Final Year Project(14UP04)")
 main.config(bg = '#292A33')
 frame1 = tk.Frame(main)
 frame1.pack(pady=10)
@@ -48,7 +48,7 @@ e1.pack(side = 'bottom',pady=5)
 
 label1 = tk.Label(frame1, text = 'Content Based Image Retrieval System')
 label1.pack(ipadx = 0, ipady = 20, padx = 0, pady = 0)
-label1.config(font = ('algerian', 30), fg = '#18E5EA', bg = '#292A33')
+label1.config(font = ('algerian', 30), fg = '#f2c38a', bg = '#292A33')
 
 Imagepath = ''
 
@@ -69,7 +69,7 @@ def chooseFile(type = 'public'):
             label.config(image = img, bg = '#18E5EA')
             label.image = img
             labels.append(label)                
-button = tk.Button(frame1, text = 'UPLOAD IMAGE', command = chooseFile, font = helv36, padx=15,pady=4,bg ='#18E5EA',activebackground='#FC9F31', bd='5', relief='raised')
+button = tk.Button(frame1, text = 'UPLOAD  IMAGE', command = chooseFile, font = helv36, padx=15,pady=4,foreground = '#FFFFFF',bg ='#821a16',activebackground='#FC9F31', bd='5', relief='raised')
 button.pack(pady = 10)
 
 
@@ -131,19 +131,19 @@ def classify():
         messagebox.showinfo('Category','This image belongs to category: ' + categories[cnt])
 
 
-button1 = tk.Button(frame2, text = 'GENERATE FEATURE VECTORS(RETRIEVAL)', font = helv36,command = dataset,padx=10,pady=4,bg ='#18E5EA',activebackground='#18E5EA', bd='5', relief='raised')
+button1 = tk.Button(frame2, text = 'GENERATE  FEATURE  VECTORS  (RETRIEVAL)', foreground = '#FFFFFF',font = helv36,command = dataset,padx=10,pady=4,bg ='#7c127b',activebackground='#18E5EA', bd='5', relief='raised')
 button1.pack(side = 'left', padx = 10)
            
 button2 = tk.Button(frame2, text = 'SEARCH  IMAGE', command = search,font = helv36,padx=10,pady=4,bg ='#18E5EA',activebackground='#18E5EA', bd='5', relief='raised')
 button2.pack(side = 'left', padx = 10)
 
-button3 = tk.Button(frame2, text = 'GENERATE DATASET(CLASSIFICATION) ',font = helv36, command = gen_classify ,padx=10,pady=4,bg ='#18E5EA',activebackground='#18E5EA', bd='5', relief='raised')
+button3 = tk.Button(frame2, text = 'GENERATE  DATASET  (CLASSIFICATION) ',font = helv36, foreground = '#FFFFFF', command = gen_classify ,padx=10,pady=4,bg ='#18660e',activebackground='#18E5EA', bd='5', relief='raised')
 button3.pack(side = 'left', padx = 10)
 
 button4 = tk.Button(frame2, text = 'CLASSIFY', font = helv36,command = classify,padx=10,pady=4,bg ='#18E5EA',activebackground='#18E5EA', bd='5', relief='raised')
 button4.pack(side = 'left', padx = 10)
 
-button4 = tk.Button(frame2, text = 'CLEAR  IMAGES',font = helv36, command = clear_label,padx=10,pady=4,bg ='#18E5EA',activebackground='#18E5EA', bd='5', relief='raised')
+button4 = tk.Button(frame2, text = 'CLEAR  IMAGES',font = helv36, command = clear_label,padx=10,pady=4,bg ='#ad131a',foreground = '#FFFFFF',activebackground='#ad131a', bd='5', relief='raised')
 button4.pack(side = 'left', padx = 10)
 
 main.mainloop()   
