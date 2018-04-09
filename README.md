@@ -3,16 +3,8 @@ A <b>CBIR</b> system which takes a query image as input, matches it with the dat
 
 Steps to run the program:
 
-1. Run <i>feature_gen.py</i><br>
-Generates the feature vectors of all the images in the dataset and stores them in a new folder <b>Feature_Vectors(low-high)</b>
+1. Run <i>loc_dataset.py</i><br>
+Update the location of the Images folder in your machine in this python file
 
-2. Run <i>train_test_gen.py</i><br>
-Generates the training data and the testing data for machine learning and stores them in new folders <b>Training_data(low-high)</b> and <b>Testing_data(low-high)</b> respectively.
-
-3. Run <i>comphist_knn.py</i><br>
-Feeds the training data to a KNN Classifier and then tests it against the testing data. It displays the accuracy score in console.
-
-If you want to test the program for a specific subset of images, then update the <i>low</i> and <i>high</i> values in the above three files.
-
-<i>low</i> = image_number of first image in the dataset<br>
-<i>high</i> = image_number of last image in the dataset
+2. Run <i>BrowseSearchButton.py</i><br>
+Opens the UI. Here you can set the range of images you want to search on, and then upload your query image and then retrieve/classify it.  
