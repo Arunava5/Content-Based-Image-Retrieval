@@ -2,7 +2,8 @@ import cv2
 import numpy as np
 import mahotas
 import pywt 
-
+from skimage.feature import greycomatrix as gc
+from skimage.feature import greycoprops as gp
 
 def img2feature(img,size = (32,32)):
     return cv2.resize(img,size).flatten().tolist()
@@ -75,3 +76,16 @@ def w2d(img, mode='haar', level=1):
     imArray_H =  np.uint8(imArray_H)
     return imArray_H
 
+def texcal(img,modihist):
+    grey = gc(img,[1],[0, np.pi/8, np.pi/4, 3*np.pi/8, np.pi/2, 5*np.pi/8, 3*np.pi/4, 7*np.pi/8],levels = 256, normed = True)
+    contrast = gp(grey,'contrast')
+    energy = gp(grey,'energy')
+    correlation = gp(grey,'correlation')
+    (h,w) = img.shape[:2]
+    for x in range(8):
+        modihist.append(contrast[0][x]/10000)
+    for x in range(8):
+        modihist.append(energy[0][x]*10)
+    for x in range(8):
+        modihist.append(correlation[0][x])  
+                      

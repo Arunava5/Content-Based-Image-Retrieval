@@ -8,7 +8,7 @@ import tkinter as tk
 from tkinter import ttk
 import numpy as np
 
-def gen_dataset(low,high,main):
+def gen_dataset_retrieve(low,high,main):
 
     folder_name = "Feature_Vectors(" + str(low) + "-" + str(high) + ")"
     if os.path.isdir(folder_name):
@@ -43,15 +43,20 @@ def gen_dataset(low,high,main):
         modihist = img2modihist(image)
         
         img = w2d(filepath,'db1',5)
-        grey = gc(img,[1],[0, np.pi/4, np.pi/2, 3*np.pi/4],levels = 256)
+        grey = gc(img,[1],[0, np.pi/8, np.pi/4, 3*np.pi/8, np.pi/2, 5*np.pi/8, 3*np.pi/4, 7*np.pi/8],levels = 256, normed = True)
+
         contrast = gp(grey,'contrast')
         energy = gp(grey,'energy')
+        correlation = gp(grey,'correlation')
+
         (h,w) = img.shape[:2]
-        tot = h*w
-        for x in range(4):
-            modihist.append(contrast[0][x]/(tot*10000))
-        for x in range(4):
-            modihist.append(energy[0][x]/tot)
+        for x in range(8):
+            modihist.append(contrast[0][x]/10000)
+        for x in range(8):
+            modihist.append(energy[0][x]*10)
+        for x in range(8):
+            modihist.append(correlation[0][x])    
+                      
      
         
         modihist = [str(i) for i in modihist]

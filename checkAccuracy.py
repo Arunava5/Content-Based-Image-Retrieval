@@ -1,198 +1,188 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sun Apr  8 10:59:02 2018
-
-@author: Arunava
-"""
-
 from __future__ import print_function
 import cv2
 import numpy as np
 from sklearn.linear_model import LogisticRegression
 from six.moves import range
-from img_descriptors import img2modihist,w2d
-from skimage.feature import greycomatrix as gc
-from skimage.feature import greycoprops as gp
+from img_descriptors import img2modihist,w2d,texcal
+import math
+from tkinter import messagebox
+import tkinter as tk
+from tkinter import ttk
+from six.moves import cPickle as pickle
+import os
 
-def gen_dataset(low,high):
+def gen_dataset_classify(low,high,queryPath,main):
+    
+    set_filename = 'DataSet(' + str(low) + '-' + str(high) + ')'
+    
+    fvector_size = 11 * 8 * 9 * 5 + 24
+    query_dataset = np.ndarray(shape=(1,fvector_size),dtype=np.float32)
 
-    high += 1
+    isok = True
+    if os.path.exists(set_filename):
+        result = messagebox.askquestion('Alert','Dataset already exists. Replace?',icon='warning')
+        if result == 'no':
+            isok = False
+            
+    if isok == False:
+        with open(set_filename, 'rb') as f:
+            dataset = pickle.load(f)
+      
+        train_dataset = dataset[0]
+        train_labels = dataset[1]
+        test_dataset = dataset[2]
+        test_labels = dataset[3]
+        
+        if queryPath == '':
+            return 0
+        
+        image = cv2.imread(queryPath)
+    
+        modihist = img2modihist(image)
+        
+        img = w2d(queryPath,'db1',5)
+      
+        texcal(img,modihist)
+        
+        query_dataset[0] = modihist
+        
+        
+        clf = LogisticRegression()
+        clf.fit(train_dataset, train_labels)
+        
+        return(clf.predict(query_dataset)[0])
+    
+    train_images = []
+    test_images = []
+    
+    templow = low
+    temphigh = high    
+    
+    if low%100 != 1:
+        images = []
+        while low%100 != 1:
+            images.append(low)
+            low += 1
+        tot = len(images)
+        permutation = np.random.permutation(images)
+        reqd = math.ceil(0.9*tot)
+        for k in range(reqd):
+            train_images.append(permutation[k])
+        for k in range(reqd,tot):
+            test_images.append(permutation[k])
+            
+    if high%100 != 0:
+        images = []
+        while high%100 != 0:
+            images.append(high)
+            high -= 1
+        tot = len(images)
+        permutation = np.random.permutation(images)
+        reqd = math.ceil(0.9*tot)
+        for k in range(reqd):
+            train_images.append(permutation[k])
+        for k in range(reqd,tot):
+            test_images.append(permutation[k])
+           
+    while low < high:
+        permutation = np.random.permutation(100)
+        
+        for k in range(90):
+            train_images.append(permutation[k]+low)
+        for k in range(90,100):
+            test_images.append(permutation[k]+low) 
+        low += 100    
+    
     traindex = 0
     testdex = 0 
-    for m in range(low,high):
-        if m%100 == 0:
-            print(m)
-        filepath = "C:/Users/Arunava/MycvProjects/Corel10k/" + str(m) + ".jpg"
-
-        image = cv2.imread(filepath)
+   
+    train_size = len(train_images)
+    test_size = len(test_images)   
+    train_dataset = np.ndarray(shape=(train_size,fvector_size),dtype=np.float32)  
+    test_dataset  = np.ndarray(shape=(test_size,fvector_size),dtype=np.float32)
+    train_labels = np.ndarray(train_size,dtype=np.int32)
+    test_labels = np.ndarray(test_size,dtype=np.int32)
     
+    popup = tk.Toplevel()
+    screen_width = main.winfo_screenwidth()
+    screen_height = main.winfo_screenheight()
+
+    x = (screen_width/2) - 150
+    y = (screen_height/2) - 50
+    popup.geometry("400x100+%d+%d"%(x,y))
+    popup.title("Generating Training & Testing Datasets")	
+    tk.Label(popup).grid(row=0,column=0)
+    progress = 0
+    progress_var = tk.DoubleVar()
+    progress_bar = ttk.Progressbar(popup, variable=progress_var, length = 400,maximum=temphigh-templow+1)
+    progress_bar.grid(row=1, column=0)
+    popup.pack_slaves()
+    
+    for m in train_images:
+      
+        filepath = "C:/Users/Arunava/MycvProjects/Corel10k/" + str(m) + ".jpg"
+        image = cv2.imread(filepath)
+ 
+        modihist = img2modihist(image)
+        
+        img = w2d(filepath,'db1',5)
+        
+        texcal(img,modihist)
+        
+        train_dataset[traindex:] = modihist
+        train_labels[traindex] = (m-1)//100 + 1
+        traindex += 1
+        
+        popup.update()
+        progress += 1
+        progress_var.set(progress)
+    
+    for m in test_images:
+         
+        filepath = "C:/Users/Arunava/MycvProjects/Corel10k/" + str(m) + ".jpg"
         image = cv2.imread(filepath)
     
         modihist = img2modihist(image)
         
         img = w2d(filepath,'db1',5)
-        grey = gc(img,[1],[0, np.pi/4, np.pi/2, 3*np.pi/4],levels = 256)
-        contrast = gp(grey,'contrast')
-        energy = gp(grey,'energy')
-        (h,w) = img.shape[:2]
-        tot = h*w
-        for x in range(4):
-            modihist.append(contrast[0][x]/(tot*10000))
-        for x in range(4):
-            modihist.append(energy[0][x]/tot)
-           
         
-        if (m-1)%100 >= 90:
-            test_dataset[testdex:] = modihist
-            test_labels[testdex] = (m-1)//100
-            testdex += 1
-        else:
-            train_dataset[traindex:] = modihist
-            train_labels[traindex] = (m-1)//100
-            traindex += 1
-            
-low = 1
-high = 10000
-tot = high - low + 1
-train_size = int(0.9*tot)
-test_size = int(0.1*tot)
-num_labels = tot//100
-
-def randomize(dataset, labels):
-  permutation = np.random.permutation(labels.shape[0])
-  shuffled_dataset = dataset[permutation,:]
-  shuffled_labels = labels[permutation]
-  return shuffled_dataset, shuffled_labels
-
-fvector_size = 11 * 8 * 9 * 5 + 8
-train_dataset = np.ndarray(shape=(train_size,fvector_size),dtype=np.float32)  
-test_dataset  = np.ndarray(shape=(test_size,fvector_size),dtype=np.float32)
-train_labels = np.ndarray(train_size,dtype=np.int32)
-test_labels = np.ndarray(test_size,dtype=np.int32)
-gen_dataset(low,high)
-
-train_dataset, train_labels = randomize(train_dataset, train_labels)
-test_dataset, test_labels = randomize(test_dataset, test_labels)
-
-clf = LogisticRegression()
-#f.write("Bins: %d %d %d\nLogisticRegression score: %f\n\n"%(binh,binsa,binv,clf.fit(train_dataset, train_labels).score(test_dataset, test_labels)))
-print("LogisticRegression score: %f\n"% clf.fit(train_dataset, train_labels).score(test_dataset, test_labels))
-
-
-'''
-f = open("NewOutputfile2.txt","w")
-
-def reformat(dataset, labels):
-  dataset = dataset.reshape((-1, fvector_size)).astype(np.float32)
-  # Map 0 to [1.0, 0.0, 0.0 ...], 1 to [0.0, 1.0, 0.0 ...]
-  labels = (np.arange(num_labels) == labels[:,None]).astype(np.float32)
-  return dataset, labels
-
-def accuracy(predictions, labels):
-  return (100.0 * np.sum(np.argmax(predictions, 1) == np.argmax(labels, 1))
-          / predictions.shape[0])
-  
-for binh in range(11,12):
-    for binsa in range(8,9):
-        for binv in range(9,10):
-            print(binh,binsa,binv)
-            fvector_size = binh * binsa * binv * 5
-            train_dataset = np.ndarray(shape=(train_size,fvector_size),dtype=np.float32)  
-            test_dataset  = np.ndarray(shape=(test_size,fvector_size),dtype=np.float32)
-            train_labels = np.ndarray(train_size,dtype=np.int32)
-            test_labels = np.ndarray(test_size,dtype=np.int32)
-            bins = (binh,binsa,binv)
-            gen_dataset(low,high)
-            train_dataset, train_labels = randomize(train_dataset, train_labels)
-            test_dataset, test_labels = randomize(test_dataset, test_labels)
-            train_dataset, train_labels = reformat(train_dataset, train_labels)
-            test_dataset, test_labels = reformat(test_dataset, test_labels)
-            train_subset = tot
-
-            graph = tf.Graph()
-            with graph.as_default():
-
-                # Input data.
-                # Load the training, validation and test data into constants that are
-                # attached to the graph.
-                tf_train_dataset = tf.constant(train_dataset[:train_subset, :])
-                tf_train_labels = tf.constant(train_labels[:train_subset])
-                tf_test_dataset = tf.constant(test_dataset)
-  
-  # Variables.
-  # These are the parameters that we are going to be training. The weight
-  # matrix will be initialized using random values following a (truncated)
-  # normal distribution. The biases get initialized to zero.
-                weights = tf.Variable(
-                tf.truncated_normal([fvector_size, num_labels]))
-                biases = tf.Variable(tf.zeros([num_labels]))
-  
-  # Training computation.
-  # We multiply the inputs with the weight matrix, and add biases. We compute
-  # the softmax and cross-entropy (it's one operation in TensorFlow, because
-  # it's very common, and it can be optimized). We take the average of this
-  # cross-entropy across all training examples: that's our loss.
-                logits = tf.matmul(tf_train_dataset, weights) + biases
-                loss = tf.reduce_mean(
-                tf.nn.softmax_cross_entropy_with_logits(labels=tf_train_labels, logits=logits))
-  
-  # Optimizer.
-  # We are going to find the minimum of this loss using gradient descent.
-                optimizer = tf.train.GradientDescentOptimizer(0.5).minimize(loss)
-  
-  # Predictions for the training, validation, and test data.
-  # These are not part of training, but merely here so that we can report
-  # accuracy figures as we train.
-                train_prediction = tf.nn.softmax(logits)
-                test_prediction = tf.nn.softmax(tf.matmul(tf_test_dataset, weights) + biases)
-  
-                num_steps = 5000
-
-
-
-            with tf.Session(graph=graph) as session:
-  # This is a one-time operation which ensures the parameters get initialized as
-  # we described in the graph: random weights for the matrix, zeros for the
-  # biases. 
-                tf.global_variables_initializer().run()
-#                print('Initialized')
-                for step in range(num_steps):
-    # Run the computations. We tell .run() that we want to run the optimizer,
-    # and get the loss value and the training predictions returned as numpy
-    # arrays.
-                    _, l, predictions = session.run([optimizer, loss, train_prediction])
-                    if (step % 100 == 0):
-                        print('Loss at step %d: %f' % (step, l))
-                        print('Training accuracy: %.1f%%' % accuracy(predictions, train_labels[:train_subset, :]))
-      # Calling .eval() on valid_prediction is basically like calling run(), but
-      # just to get that one numpy array. Note that it recomputes all its graph
-      # dependencies.
-
-                        print('Test accuracy: %.1f%%' % accuracy(test_prediction.eval(), test_labels))            
-'''            
-
-'''
-f.close()
-#with open(train_pickle_file, "wb") as f:
-#    pickle.dump(train_dataset, f, pickle.HIGHEST_PROTOCOL)
-#with open(test_pickle_file, "wb") as f:
-#    pickle.dump(test_dataset, f, pickle.HIGHEST_PROTOCOL)
-
-print(train_dataset.shape)
-print(np.mean(train_dataset))
-print(np.std(train_dataset))
-print(test_dataset.shape)
-print(np.mean(test_dataset))
-print(np.std(test_dataset))
-
-print('Training:', train_dataset.shape, train_labels.shape)
-print('Testing:', test_dataset.shape, test_labels.shape)
-
-
-
-
-print('Training set', train_dataset.shape, train_labels.shape)
-print('Test set', test_dataset.shape, test_labels.shape)
-'''
-# With gradient descent training, even this much data is prohibitive.
-# Subset the training data for faster turnaround. 
+        texcal(img,modihist)
+ 
+        test_dataset[testdex:] = modihist
+        test_labels[testdex] = (m-1)//100 + 1
+        testdex += 1
+        
+        popup.update()
+        progress += 1
+        progress_var.set(progress)
+    
+    print(test_images)    
+    popup.destroy()
+    messagebox.showinfo( "Dataset Creation", "Datasets have been successfully generated!")         
+    
+    dataset = []
+    dataset.append(train_dataset)
+    dataset.append(train_labels)
+    dataset.append(test_dataset)
+    dataset.append(test_labels)
+                       
+    with open(set_filename, 'wb') as f:
+          pickle.dump(dataset, f, pickle.HIGHEST_PROTOCOL)        
+        
+    
+    if queryPath == '':
+        return 0        
+    image = cv2.imread(queryPath)
+    
+    modihist = img2modihist(image)
+        
+    img = w2d(queryPath,'db1',5)
+      
+    texcal(img,modihist)
+        
+    query_dataset[0] = modihist
+        
+    clf = LogisticRegression()
+    clf.fit(train_dataset, train_labels)       
+    return(clf.predict(query_dataset)[0])
+   
