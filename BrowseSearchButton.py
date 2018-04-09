@@ -3,8 +3,10 @@ import tkinter.filedialog as fd
 from PIL import Image, ImageTk
 from query import find_relevant
 from minifeature_gen import gen_dataset_retrieve
-from checkAccuracy import gen_dataset_classify
+from feature_classify import gen_dataset_classify
 from tkinter import messagebox
+from classifier import classifyImage
+from tkinter import font
 
 categories = ['null','Painting','Bear','Wolf','Lion','Elephant','Tiger','Mountains','Swimming',
               'Historic Monuments','Vegetables','Woman','Dog','Clouds','Mushrooms']
@@ -13,10 +15,12 @@ main = tk.Tk()
 main.geometry("1400x900")
 main.resizable()
 
+helv36 = font.Font(family='Helvetica', size=12, weight='bold')
+
 main.title("CONTENT BASED IMAGE RETRIEVAL-Final Year Project")
 main.config(bg = '#292A33')
 frame1 = tk.Frame(main)
-frame1.pack()
+frame1.pack(pady=10)
 frame1.config(bg = '#292A33')
 frame2 = tk.Frame(main)
 frame2.pack()
@@ -40,7 +44,6 @@ label1.pack(ipadx = 0, ipady = 20, padx = 0, pady = 0)
 label1.config(font = ('algerian', 30), fg = '#18E5EA', bg = '#292A33')
 
 Imagepath = ''
-label = tk.Label(frame1, image = None)
 
 def chooseFile(type = 'public'):
       global Imagepath
@@ -54,11 +57,12 @@ def chooseFile(type = 'public'):
                 dim = (int(r*w),130)
                 data.thumbnail(dim, Image.ANTIALIAS)
             img = ImageTk.PhotoImage(data)
+            label = tk.Label(frame1, image = None)
             label.pack(ipadx = 3, ipady = 3, padx = 5, pady = 5)
             label.config(image = img, bg = '#18E5EA')
             label.image = img
-                            
-button = tk.Button(frame1, text = 'UPLOAD IMAGE', command = chooseFile, padx=15,pady=4,bg ='#18E5EA',activebackground='#FC9F31', bd='5', relief='raised')
+            labels.append(label)                
+button = tk.Button(frame1, text = 'UPLOAD IMAGE', command = chooseFile, font = helv36, padx=15,pady=4,bg ='#18E5EA',activebackground='#FC9F31', bd='5', relief='raised')
 button.pack(pady = 10)
 
 
@@ -101,24 +105,38 @@ def dataset():
       gen_dataset_retrieve(int(e1.get()), int(e2.get()), main)      
       
 def clear_label():
+      global Imagepath
+      Imagepath = ''
       for label in labels:
             label.destroy()
 
+def gen_classify():
+    gen_dataset_classify(int(e1.get()), int(e2.get()), main)
+    
 def classify():
-    cat = gen_dataset_classify(int(e1.get()), int(e2.get()), Imagepath, main )
-    if cat != 0:
-        messagebox.showinfo('Category','This image belongs to Category: ' + categories[cat])
+    global Imagepath
+    cnt = classifyImage(Imagepath,int(e1.get()), int(e2.get()))
+    if cnt == 0:
+        messagebox.showinfo('Error','Please select a query image to classify')
+    elif cnt == -1:
+        messagebox.showinfo('Error','No dataset found!')
+    else:    
+        messagebox.showinfo('Category','This image belongs to category: ' + categories[cnt])
+
+
+button1 = tk.Button(frame2, text = 'GENERATE FEATURE VECTORS(RETRIEVAL)', font = helv36,command = dataset,padx=10,pady=4,bg ='#18E5EA',activebackground='#18E5EA', bd='5', relief='raised')
+button1.pack(side = 'left', padx = 10)
            
-button1 = tk.Button(frame2, text = 'SEARCH  IMAGE', command = search,padx=20,pady=4,bg ='#18E5EA',activebackground='#18E5EA', bd='5', relief='raised')
-button1.pack(side = 'left', padx = 50)
+button2 = tk.Button(frame2, text = 'SEARCH  IMAGE', command = search,font = helv36,padx=10,pady=4,bg ='#18E5EA',activebackground='#18E5EA', bd='5', relief='raised')
+button2.pack(side = 'left', padx = 10)
 
-button2 = tk.Button(frame2, text = 'GENERATE  FEATURE VECTORS', command = dataset,padx=20,pady=4,bg ='#18E5EA',activebackground='#18E5EA', bd='5', relief='raised')
-button2.pack(side = 'left', padx = 50)
+button3 = tk.Button(frame2, text = 'GENERATE DATASET(CLASSIFICATION) ',font = helv36, command = gen_classify ,padx=10,pady=4,bg ='#18E5EA',activebackground='#18E5EA', bd='5', relief='raised')
+button3.pack(side = 'left', padx = 10)
 
-button3 = tk.Button(frame2, text = 'CLASSIFY', command = classify,padx=20,pady=4,bg ='#18E5EA',activebackground='#18E5EA', bd='5', relief='raised')
-button3.pack(side = 'left', padx = 50)
+button4 = tk.Button(frame2, text = 'CLASSIFY', font = helv36,command = classify,padx=10,pady=4,bg ='#18E5EA',activebackground='#18E5EA', bd='5', relief='raised')
+button4.pack(side = 'left', padx = 10)
 
-button4 = tk.Button(frame2, text = 'CLEAR  IMAGES', command = clear_label,padx=20,pady=4,bg ='#18E5EA',activebackground='#18E5EA', bd='5', relief='raised')
-button4.pack(side = 'left', padx = 50)
+button4 = tk.Button(frame2, text = 'CLEAR  IMAGES',font = helv36, command = clear_label,padx=10,pady=4,bg ='#18E5EA',activebackground='#18E5EA', bd='5', relief='raised')
+button4.pack(side = 'left', padx = 10)
 
 main.mainloop()   
