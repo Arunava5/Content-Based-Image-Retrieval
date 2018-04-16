@@ -26,15 +26,16 @@ categories = ['null','Painting','Bear','Wolf','Lion','Elephant','Tiger','Mountai
               'Railway','Ferns']
 
 
-labels = []
 main = tk.Tk()
 main.geometry("1400x900")
 main.resizable()
 
 helv36 = font.Font(family='Helvetica', size=12, weight='bold')
+helv37 = font.Font(family='Helvetica', size=15, weight = 'bold')
 
 main.title("CONTENT BASED IMAGE RETRIEVAL - Final Year Project(14UP04)")
-main.config(bg = '#292A33')
+main.config(bg = '#292A33')#GREY COLOR
+#main.config(bg='#FFFFFF')
 frame1 = tk.Frame(main)
 frame1.pack(pady=10)
 frame1.config(bg = '#292A33')
@@ -44,24 +45,44 @@ frame2.config(bg = '#292A33')
 frame3 = tk.Frame(main)
 frame3.pack(padx = 5, pady = 5)
 frame3.config(bg = '#292A33')
-frame4 = tk.Frame(main)
-frame4.pack(padx = 5, pady = 5)
-frame4.config(bg = '#292A33')
+#frame4 = tk.Frame(main)
+#frame4.pack(padx = 5, pady = 5)
+#frame4.config(bg = '#FFFFFF')
+			  
+			  
+label3 = tk.Label(frame2, text = 'ENTER RANGE:')
+label3.pack(ipadx = 0, ipady = 0, padx = 0, pady = 0)
+label3.config(font = ('ariel', 18), fg = 'white', bg = '#292A33')		  
+			  
 
-e1 = tk.Entry(frame2,bg='#292A33',fg='white')
-e2 = tk.Entry(frame2,bg='#292A33',fg='white')
+e1 = tk.Entry(frame2,bg='#FFFFFF',fg='black',font = helv37)
+e2 = tk.Entry(frame2,bg='#FFFFFF',fg='black',font = helv37)
 e1.insert(0,'1')
+
+#DASH
+label3 = tk.Label(frame2, text = '--')
+
+label3.config(bg = '#292A33', fg= 'white')
+labels = []
+
+
+
 e2.insert(0,'500')
-e2.pack(side = 'bottom')
-e1.pack(side = 'bottom',pady=5)
+e2.pack(side = 'right',ipadx=10,ipady=10,padx = 10)
+label3.pack(ipadx = 0, ipady = 0, padx = 0, pady = 0,side='right')
+e1.pack(side = 'right',ipadx=10,ipady=10,pady=10, padx = 10)
 
 label1 = tk.Label(frame1, text = 'Content Based Image Retrieval System')
 label1.pack(ipadx = 0, ipady = 20, padx = 0, pady = 0)
-label1.config(font = ('algerian', 30), fg = '#f2c38a', bg = '#292A33')
+label1.config(font = ('algerian', 30), fg = 'white', bg = '#292A33')
 
+			  
+			  
+  
+			  
 Imagepath = ''
-
 def chooseFile(type = 'public'):
+      global data
       global Imagepath
       if Imagepath != '':
           clear_label()
@@ -70,64 +91,78 @@ def chooseFile(type = 'public'):
       if ImageFile != None:
             Imagepath = ImageFile.name
             data = Image.open(ImageFile)
-            (w,h) = data.size
+            '''(w,h) = data.size
             if h > 130:
                 r = 130 / h
                 dim = (int(r*w),130)
-                data.thumbnail(dim, Image.ANTIALIAS)
+                data.thumbnail(dim, Image.ANTIALIAS)'''
             img = ImageTk.PhotoImage(data)
             label = tk.Label(frame1, image = None)
             label.pack(ipadx = 3, ipady = 3, padx = 5, pady = 5)
-            label.config(image = img, bg = '#18E5EA')
+            label.config(image = img, bg = 'black')
             label.image = img
             labels.append(label)                
-button = tk.Button(frame1, text = 'UPLOAD  IMAGE', command = chooseFile, font = helv36, padx=15,pady=4,foreground = '#FFFFFF',bg ='#821a16',activebackground='#821a16', bd='5', relief='raised')
+button = tk.Button(frame1, text = 'UPLOAD  IMAGE', command = chooseFile, font = helv36, padx=15,pady=4,foreground = 'black',bg ='#ffffff',activebackground='black', bd='2', relief='raised')
 button.pack(pady = 10)
 
 
 def search():
-    
+      global data 
       imgNum = find_relevant(Imagepath, int(e1.get()), int(e2.get()), main)
+      new = tk.Toplevel()
+      new.geometry("1400x900")
+      new.resizable()
+      newFrame1 = tk.Frame(new)
+      newFrame1.pack(pady = 10)
+      newFrame2 = tk.Frame(new)
+      newFrame2.pack(pady = 10)
+      newFrame3 = tk.Frame(new)
+      newFrame3.pack(pady = 10)
+      
+      newLabel1 = tk.Label(newFrame1, text = 'Query Image:', font = helv37)
+      newLabel1.pack(side = 'top')
+      newLabel2 = tk.Label(newFrame2, text = 'Search Results:', font = helv37)
+      newLabel2.pack(side = 'top')
+      
+      queryimg = ImageTk.PhotoImage(data)
+      queryLabel = tk.Label(newFrame1, image = None)
+      queryLabel.pack(ipadx = 3, ipady = 3, padx = 5, pady = 5)
+      queryLabel.config(image = queryimg, bg = 'black')
+      queryLabel.image = queryimg
+      
+     
       if not imgNum:
           return
       for i in imgNum[:5]:
             filename = location + str(i) + ".jpg"
             data = Image.open(filename)
-            (w,h) = data.size
+            '''(w,h) = data.size
             if h > 130:
                 r = 130 / h
                 dim = (int(r*w),130)
-                data.thumbnail(dim, Image.ANTIALIAS)
+                data.thumbnail(dim, Image.ANTIALIAS)'''
             img = ImageTk.PhotoImage(data)
-            label2 = tk.Label(frame3, image = None)
-            labels.append(label2)
+            label2 = tk.Label(newFrame2, image = None)
             label2.config(image = img, bg = '#FC9F31')
-            label2.image = img
             label2.pack(side = 'left', ipadx = 3, ipady = 1, padx = 10, pady = 1)
-
+            label2.image = img
       for i in imgNum[5:10]:
             filename = location + str(i) + ".jpg"
             data = Image.open(filename)
-            (w,h) = data.size
+            '''(w,h) = data.size
             if h > 130:
                 r = 130 / h
                 dim = (int(r*w),130)
-                data.thumbnail(dim, Image.ANTIALIAS)
+                data.thumbnail(dim, Image.ANTIALIAS)'''
             img = ImageTk.PhotoImage(data)
-            label3 = tk.Label(frame4, image = None)
-            labels.append(label3)
+            label3 = tk.Label(newFrame3, image = None)
             label3.config(image = img, bg = '#FC9F31')
-            label3.image = img
             label3.pack(side = 'left',  ipadx = 3, ipady = 1, padx = 10, pady = 3)
+            label3.image = img
 
 def dataset():
       gen_dataset_retrieve(int(e1.get()), int(e2.get()), main)      
       
-def clear_label():
-      global Imagepath
-      Imagepath = ''
-      for label in labels:
-            label.destroy()
 
 def gen_classify():
     gen_dataset_classify(int(e1.get()), int(e2.get()), main)
@@ -142,20 +177,29 @@ def classify():
     else:    
         messagebox.showinfo('Category','This image belongs to category: ' + categories[cnt])
 
+def clear_label():
+      for label in labels:
+            label.destroy()
+      
 
-button1 = tk.Button(frame2, text = 'GENERATE  FEATURE  VECTORS  (RETRIEVAL)', foreground = '#FFFFFF',font = helv36,command = dataset,padx=10,pady=4,bg ='#7c127b',activebackground='#7c127b', bd='5', relief='raised')
-button1.pack(side = 'left', padx = 10)
+def OpenStartPage():
+      main.destroy()
+      exec(compile(open("Welcome.py").read(), "Welcome.py", 'exec'))
+      #import Welcome
+
+button1 = tk.Button(frame3, text = 'GENERATE  FEATURE  VECTORS  (RETRIEVAL)', foreground = 'black',font = helv36,command = dataset,padx=10,pady=4,bg ='white',activebackground='white', bd='2', relief='raised')
+button1.pack(side = 'top', padx = 10, pady = 15)
            
-button2 = tk.Button(frame2, text = 'SEARCH  IMAGE', command = search,font = helv36,padx=10,pady=4,bg ='#18E5EA',activebackground='#18E5EA', bd='5', relief='raised')
-button2.pack(side = 'left', padx = 10)
+button2 = tk.Button(frame3, text = 'SEARCH  IMAGE', command = search,font = helv36,padx=10,pady=4,bg ='white', foreground = 'black',activebackground='white', bd='2', relief='raised')
+button2.pack(side = 'top', padx = 10, pady = 15)
 
-button3 = tk.Button(frame2, text = 'GENERATE  DATASET  (CLASSIFICATION) ',font = helv36, foreground = '#FFFFFF', command = gen_classify ,padx=10,pady=4,bg ='#18660e',activebackground='#18660e', bd='5', relief='raised')
-button3.pack(side = 'left', padx = 10)
+button3 = tk.Button(frame3, text = 'GENERATE  DATASET  (CLASSIFICATION) ',font = helv36, foreground = 'black', command = gen_classify ,padx=10,pady=4,bg ='white',activebackground='white', bd='2', relief='raised')
+button3.pack(side = 'top', padx = 10, pady = 15)
 
-button4 = tk.Button(frame2, text = 'CLASSIFY', font = helv36,command = classify,padx=10,pady=4,bg ='#18E5EA',activebackground='#18E5EA', bd='5', relief='raised')
-button4.pack(side = 'left', padx = 10)
+button4 = tk.Button(frame3, text = 'CLASSIFY', font = helv36,command = classify,padx=10,pady=4, foreground = 'black',bg ='white',activebackground='white', bd='2', relief='raised')
+button4.pack(side = 'top', padx = 10, pady = 15)
 
-button4 = tk.Button(frame2, text = 'CLEAR  IMAGES',font = helv36, command = clear_label,padx=10,pady=4,bg ='#ad131a',foreground = '#FFFFFF',activebackground='#ad131a', bd='5', relief='raised')
-button4.pack(side = 'left', padx = 10)
+button5 = tk.Button(frame3, text = '<Back',font = helv36, command = OpenStartPage,padx=10,pady=4,bg ='#ad131a',foreground = '#FFFFFF',activebackground='#ad131a', bd='5', relief='raised')
+button5.pack(side = 'bottom', padx = 10)
 
 main.mainloop()   
